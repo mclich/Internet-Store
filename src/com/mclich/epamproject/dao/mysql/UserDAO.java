@@ -177,6 +177,162 @@ public class UserDAO implements DataAccessObject<User>
 		}
 	}
 
+	public void updateLogin(int id, String login) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET login=? WHERE id=?;");
+			int k=1;
+			ps.setString(k++, login);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
+	public void updatePassword(int id, String password) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET password=? WHERE id=?;");
+			int k=1;
+			ps.setString(k++, password);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
+	public void updateEmail(int id, String email) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET email=? WHERE id=?;");
+			int k=1;
+			ps.setString(k++, email);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
+	public void updateName(int id, String name) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET first_name=? WHERE id=?;");
+			int k=1;
+			ps.setString(k++, name);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
+	public void updateSurname(int id, String surname) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET last_name=? WHERE id=?;");
+			int k=1;
+			ps.setString(k++, surname);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
+	public void updateGender(int id, boolean gender) throws GetException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.user SET gender=? WHERE id=?;");
+			int k=1;
+			ps.setBoolean(k++, gender);
+			ps.setInt(k++, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Could not update user", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
 	@Override
 	public User get(int id) throws GetException, CNAException
 	{

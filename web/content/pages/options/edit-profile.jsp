@@ -8,24 +8,28 @@
 		<%@ include file="../header.jsp" %>
 		<main>
 			<h2 class="hl" data-i18n="epf">Edit Profile</h2>
-			<form action="profile" method="post">
+			<form style="grid-template-columns: 150px 300px 150px; grid-column-gap: 2rem;" action="profile" method="post">
 				<label class="required">Login:</label>
-				<input type="text" name="login" placeholder="${user.login}" pattern="[a-z]{4,8}" title="Must contain from 4 to 8 only lowercase letters" required/>
+				<input type="text" name="login" placeholder="${user.login}" pattern="[a-z]{4,8}" title="Must contain from 4 to 8 only lowercase letters"/>
+				<input class="edit-button" type="submit" value="Edit Login"/>
 				<label class="required" data-i18n="pw_">Password:</label>
-				<input type="password" name="password" placeholder="New password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters" required/>
+				<input type="password" name="password" placeholder="New password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"/>
+				<input class="edit-button" type="submit" value="Edit Password"/>
 				<label class="required" data-i18n="em_">E-mail:</label>
-				<input type="email" name="email" placeholder="${user.email}" required/>
+				<input type="email" name="email" placeholder="${user.email}"/>
+				<input class="edit-button" type="submit" value="Edit E-mail"/>
 				<label class="required" data-i18n="n_">Name:</label>
-				<input type="text" name="firstName" placeholder="${user.firstName}" required/>
+				<input type="text" name="firstName" placeholder="${user.firstName}"/>
+				<input class="edit-button" type="submit" value="Edit Name"/>
 				<label class="required" data-i18n="sn_">Surname:</label>
-				<input type="text" name="lastName" placeholder="${user.lastName}" required/>
+				<input type="text" name="lastName" placeholder="${user.lastName}"/>
+				<input class="edit-button" type="submit" value="Edit Surname"/>
 				<label class="required" data-i18n="g_">Gender:</label>
-				
 				<div>
-					<div><input type="radio" name="gender" value="male" ${user.gender?"checked":""} required/><p data-i18n="m">Male</p></div>
-					<div><input type="radio" name="gender" value="female" ${user.gender?"":"checked"} required/><p data-i18n="f">Female</p></div>
+					<div><input type="radio" name="gender" value="male" ${user.gender?"checked":""}/><p data-i18n="m">Male</p></div>
+					<div><input type="radio" name="gender" value="female" ${user.gender?"":"checked"}/><p data-i18n="f">Female</p></div>
 				</div>
-				<input class="form-button edit-button" data-i18n="[value]e" type="submit" value="Edit"/>
+				<input class="edit-button" type="submit" value="Edit Gender"/>
 				<a class="form-button add-button" data-i18n="b" href="profile">Back</a>
 				<c:if test="${existingLE!=null&&!existingLE.isEmpty()}">
 					<label class="error" data-i18n="le-e">${existingLE}</label>
