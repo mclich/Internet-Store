@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.dao.DAOFactory;
 import com.mclich.epamproject.dao.DataAccessObject;
 import com.mclich.epamproject.dao.DAOFactory.Type;
@@ -21,7 +22,6 @@ import com.mclich.epamproject.exception.TransactionException.CreateException;
 import com.mclich.epamproject.exception.TransactionException.DeleteException;
 import com.mclich.epamproject.exception.TransactionException.GetException;
 import com.mclich.epamproject.exception.TransactionException.UpdateException;
-import com.mclich.epamproject.filter.LogFilter;
 
 public class UserDAO implements DataAccessObject<User>
 {
@@ -72,7 +72,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not create new user", exc);
+			Constants.LOGGER.error("Could not create new user", exc);
 			this.factory.rollback(con, new CreateException());
 			throw new CreateException(exc.getMessage());
 		}
@@ -107,13 +107,13 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not delete user", exc);
+			Constants.LOGGER.error("Could not delete user", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
 		catch(GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get user ID", exc);
+			Constants.LOGGER.error("Could not get user ID", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
@@ -161,13 +161,13 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not update user", exc);
+			Constants.LOGGER.error("Could not update user", exc);
 			this.factory.rollback(con, new UpdateException());
 			throw new UpdateException(exc.getMessage());
 		}
 		catch(GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get order ID from user orders", exc);
+			Constants.LOGGER.error("Could not get order ID from user orders", exc);
 			this.factory.rollback(con, new UpdateException());
 			throw new UpdateException(exc.getMessage());
 		}
@@ -230,7 +230,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get user", exc);
+			Constants.LOGGER.error("Could not get user", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -257,7 +257,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get user", exc);
+			Constants.LOGGER.error("Could not get user", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -295,7 +295,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get user ID", exc);
+			Constants.LOGGER.error("Could not get user ID", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -326,7 +326,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get a list of users", exc);
+			Constants.LOGGER.error("Could not get a list of users", exc);
 			result=new ArrayList<>();
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
@@ -357,7 +357,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get a list of user logins", exc);
+			Constants.LOGGER.error("Could not get a list of user logins", exc);
 			result=new ArrayList<>();
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
@@ -388,7 +388,7 @@ public class UserDAO implements DataAccessObject<User>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get a list of user emails", exc);
+			Constants.LOGGER.error("Could not get a list of user emails", exc);
 			result=new ArrayList<>();
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());

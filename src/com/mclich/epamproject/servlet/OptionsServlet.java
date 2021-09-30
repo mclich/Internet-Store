@@ -14,12 +14,7 @@ import com.mclich.epamproject.entity.Category;
 import com.mclich.epamproject.entity.Product;
 import com.mclich.epamproject.entity.User;
 import com.mclich.epamproject.entity.User.Role;
-import com.mclich.epamproject.exception.CNAException;
 import com.mclich.epamproject.exception.NoRightsException;
-import com.mclich.epamproject.exception.TransactionException.CreateException;
-import com.mclich.epamproject.exception.TransactionException.DeleteException;
-import com.mclich.epamproject.exception.TransactionException.GetException;
-import com.mclich.epamproject.exception.TransactionException.UpdateException;
 
 @WebServlet("/options")
 @SuppressWarnings("serial")
@@ -39,15 +34,7 @@ public class OptionsServlet extends HttpServlet
 		}
 		else
 		{
-			List<Category> categories=null;
-			try
-			{
-				categories=CategoryDAO.getInstance().getAll();
-			}
-			catch(CNAException | GetException exc)
-			{
-				Constants.errorRedirect(req, res, exc, false);
-			}
+			List<Category> categories=CategoryDAO.getInstance().getAll();
 			req.setAttribute("categories", categories);
 			boolean noAccess=false;
 			Object attr=req.getSession().getAttribute("user");
@@ -66,30 +53,15 @@ public class OptionsServlet extends HttpServlet
 			else if(noAccess) Constants.errorRedirect(req, res, new NoRightsException(), false);
 			else if(action.equals("edit"))
 			{
-				Product product=null;
-				try
-				{
-					product=ProductDAO.getInstance().get(productId);
-				}
-				catch(CNAException | GetException exc)
-				{
-					Constants.errorRedirect(req, res, exc, false);
-				}
+				Product product=ProductDAO.getInstance().get(productId);
 				req.setAttribute("currProduct", product);
 				req.getRequestDispatcher("content/pages/options/edit-product.jsp").forward(req, res);
 			}
 			else if(action.equals("delete"))
 			{
 				ProductDAO pDAO=ProductDAO.getInstance();
-				try
-				{
-					pDAO.delete(pDAO.get(productId));
-				}
-				catch(CNAException | GetException | DeleteException exc)
-				{
-					Constants.errorRedirect(req, res, exc, false);
-				}
-				req.getSession().setAttribute("actionMsg", "Product was deleted successfully");
+				pDAO.delete(pDAO.get(productId));
+				req.getSession().setAttribute("deleteMsg", "Product was deleted successfully");
 				res.sendRedirect("catalog");
 			}
 		}
@@ -109,15 +81,9 @@ public class OptionsServlet extends HttpServlet
 			else
 			{
 				Product product=new Product(req.getParameter("name"), Float.parseFloat(req.getParameter("price")), new Category(req.getParameter("category")));
-				try
-				{
-					ProductDAO.getInstance().create(product);
-				}
-				catch(CNAException | CreateException exc)
-				{
-					Constants.errorRedirect(req, res, exc, false);
-				}
-				req.getSession().setAttribute("actionMsg", "Product was created successfully");
+				ProductDAO.getInstance().create(product);
+				Constants.LOGGER.info("Created: "+product.toString());
+				req.getSession().setAttribute("createMsg", "Product was created successfully");
 				res.sendRedirect("catalog");
 			}
 		}
@@ -125,24 +91,18 @@ public class OptionsServlet extends HttpServlet
 		{
 			int currProductId=Integer.parseInt(req.getParameter("product"));
 			Product upd=new Product(req.getParameter("name"), Float.parseFloat(req.getParameter("price")), new Category(req.getParameter("category")));
-			try
+			Product tmp=ProductDAO.getInstance().get(currProductId);
+			if(upd.getName().equals(tmp.getName())&&upd.getPrice()==tmp.getPrice()&&upd.getCategory().getName().equals(tmp.getCategory().getName()))
 			{
-				Product tmp=ProductDAO.getInstance().get(currProductId);
-				if(upd.getName().equals(tmp.getName())&&upd.getPrice()==tmp.getPrice()&&upd.getCategory().getName().equals(tmp.getCategory().getName()))
-				{
-					req.getSession().setAttribute("noChanges", "No changes have been provided");
-					res.sendRedirect("options?action=edit&product="+currProductId);
-				}
-				else
-				{
-					ProductDAO.getInstance().update(currProductId, upd);
-					req.getSession().setAttribute("actionMsg", "Product was edited successfully");
-					res.sendRedirect("catalog");
-				}
+				req.getSession().setAttribute("noChanges", "No changes have been provided");
+				res.sendRedirect("options?action=edit&product="+currProductId);
 			}
-			catch(CNAException | GetException | UpdateException exc)
+			else
 			{
-				Constants.errorRedirect(req, res, exc, false);
+				ProductDAO.getInstance().update(currProductId, upd);
+				Constants.LOGGER.info("Edited: "+upd.toString());
+				req.getSession().setAttribute("editMsg", "Product was edited successfully");
+				res.sendRedirect("catalog");
 			}
 		}
 	}

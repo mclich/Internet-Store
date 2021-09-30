@@ -2,6 +2,7 @@ package com.mclich.epamproject.entity;
 
 import java.io.Serializable;
 import java.util.Map;
+import com.mclich.epamproject.Constants;
 
 @SuppressWarnings("serial")
 public class Order implements Serializable
@@ -37,6 +38,7 @@ public class Order implements Serializable
 		this.orderer=orderer;
 		this.products=products;
 		this.status=Status.PROCESSED;
+		Constants.LOGGER.info("Entity created: "+this.toString());
 	}
 	
 	public int getId()
@@ -87,5 +89,11 @@ public class Order implements Serializable
 	public void setStatus(Status status)
 	{
 		this.status=status;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Order [orderer="+this.orderer.toString()+", products="+this.products+", status="+this.status+"]";
 	}
 }

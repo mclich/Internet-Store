@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.codec.digest.DigestUtils;
+
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.dao.mysql.UserDAO;
 import com.mclich.epamproject.entity.User;
 
@@ -30,17 +32,16 @@ public class RegisterServlet extends HttpServlet
 		{
 			User user=new User(req.getParameter("login"), DigestUtils.sha256Hex(req.getParameter("password")), req.getParameter("email"), req.getParameter("firstName"), req.getParameter("lastName"), req.getParameter("gender").equals("male"));
 			uDAO.create(user);
+			Constants.LOGGER.info("Registered: "+user.toString());
 			req.getSession().setAttribute("user", user);
-			req.getSession().setAttribute("loggedAs", "You are logged in as "+user.getFirstName()+" "+user.getLastName());
+			req.getSession().setAttribute("loggedAs", user.getFirstName()+" "+user.getLastName());
 			res.sendRedirect("../InternetStore");
 		}
 		else
 		{
-			String msg=new String();
-			if(!loginNotExist&&!emailNotExist) msg="Such login and email already exists";
-			else if(!loginNotExist) msg="Such login already exists";
-			else if(!emailNotExist) msg="Such email already exists";
-			req.getSession().setAttribute("existing", msg);
+			if(!loginNotExist&&!emailNotExist) req.getSession().setAttribute("existingLE", "Such login and email already exists");
+			else if(!loginNotExist) req.getSession().setAttribute("existingL", "Such login already exists");
+			else if(!emailNotExist) req.getSession().setAttribute("existingE", "Such email already exists");
 			req.getRequestDispatcher("content/pages/options/edit-profile.jsp").forward(req, res);
 		}
 	}

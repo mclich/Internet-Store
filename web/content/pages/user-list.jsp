@@ -1,23 +1,23 @@
 <%@ include file="imports.jsp" %>
-<html>
+<html lang="${lang}">
     <head>
 		<%@ include file="head.jsp" %>
-		<title>Internet Store - Users</title>
+		<title data-i18n="is-u">Internet Store - Users</title>
 	</head>
     <body>
 		<%@ include file="header.jsp" %>
 		<main>
-			<h2 class="hl">User List</h2>
+			<h2 class="hl" data-i18n="ul">User List</h2>
 			<table>
 				<thead>
 					<tr>
-						<th class="sortable">Login</th>
-						<th class="sortable">First Name</th>
-						<th class="sortable">Last Name</th>
-						<th class="sortable">E-mail</th>
-						<th class="sortable">Gender</th>
-						<th class="sortable">Roles</th>
-						<th>Actions</th>
+						<th class="sortable" data-i18n="li">Login</th>
+						<th class="sortable" data-i18n="n">Name</th>
+						<th class="sortable" data-i18n="sn">Surname</th>
+						<th class="sortable" data-i18n="em">E-mail</th>
+						<th class="sortable" data-i18n="g">Gender</th>
+						<th class="sortable" data-i18n="r">Roles</th>
+						<th data-i18n="as">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -31,8 +31,8 @@
 							<td><p>${cUser.getRolesString()}</p></td>
 							<td>
 								<ul class="actions">
-									<li><a class="show-orders add-button" href="user-orders?login=${cUser.login}&back=user-list">Show orders</a></li>
-									<li><a class="delete-button" href="">Block user</a></li>
+									<li><a class="show-orders add-button" data-i18n="so" href="user-orders?login=${cUser.login}&back=user-list">Show orders</a></li>
+									<li><a class="delete-button" data-i18n="bu" href="">Block user</a></li>
 								</ul>
 							</td>
 						</tr>

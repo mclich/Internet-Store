@@ -1,21 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE xml>
-<Configuration status="INFO">
+<Configuration>
+	<Properties>
+		<Property name="filename">webapp.log</Property>
+	</Properties>
 	<Appenders>
-		<Console name="Console" target="SYSTEM_OUT">
-			<!-- "[%d{dd.MM.yyyy}] [%d{HH:mm:ss}] [%-4p] [%t] [%C{1}.%M:%L] \> %m%n" -->
+		<Console name="STDOUT" target="SYSTEM_OUT">
 			<PatternLayout pattern="[%d{dd.MM.yyyy}] [%d{HH:mm:ss}] [%-4p] [%C{1}.%M:%L] \> %m%n"/>
 		</Console>
-	    <!-- 
-		<File name="File" fileName="C:\\Oracle\\Middleware\\user_projects\\domains\\..\\trace.log">
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>    
+		<File name="FILE" fileName="D:/Eclipse Projects (v.2020)/logs/webapp.log" createOnDemand="true">
+			<PatternLayout pattern="[%d{dd.MM.yyyy}] [%d{HH:mm:ss}] [%-4p] [%C{1}.%M:%L] \> %m%n"/>    
 		</File>
-		-->
 	</Appenders>
 	<Loggers>
 		<Root level="debug">
-			<AppenderRef ref="Console"/>
-			<!--<AppenderRef ref="File"/>-->
+			<AppenderRef ref="STDOUT" level="info"/>
+			<AppenderRef ref="FILE" level="debug"/>
 		</Root>
 	</Loggers>
 </Configuration>
+
+<!-- 
+
+<Properties>
+		<Property name="filename">../web/log/webapp.log</Property>
+	</Properties>
+	
+	<Appenders type="Console" name="STDOUT">
+		<PatternLayout pattern="[%d{dd.MM.yyyy}] [%d{HH:mm:ss}] [%-4p] [%C{1}.%M:%L] \> %m%n"/>
+	</Appenders>
+	
+	<Appenders type="File" name="FILE" fileName="${filename}">
+		<PatternLayout pattern="[%d{dd.MM.yyyy}] [%d{HH:mm:ss}] [%-4p] [%C{1}.%M:%L] \> %m%n"/>    
+	</Appenders>
+	
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="STDOUT"/>
+			<AppenderRef ref="FILE"/>
+		</Root>
+	</Loggers>
+
+ -->

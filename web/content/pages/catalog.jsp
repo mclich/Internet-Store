@@ -1,29 +1,43 @@
 <%@ include file="imports.jsp" %>
-<html>
+<html lang="${lang}">
 	<head>
 		<%@ include file="head.jsp" %>
-		<title>Internet Store - Catalog</title>
+		<title data-i18n="is-cl">Internet Store - Catalog</title>
 	</head>
 	<body>
 		<%@ include file="header.jsp" %>
 		<main>
-			<h2 class="hl">Catalog</h2>
+			<h2 class="hl" data-i18n="cl">Catalog</h2>
 			<c:set var="createNew" value="${false}"/>
-			<c:if test="${actionMsg!=null&&!actionMsg.isEmpty()}">
+			<c:if test="${createMsg!=null&&!createMsg.isEmpty()}">
 				<div class="warn">
-					<div>${actionMsg}</div>
+					<div data-i18n="pcs">${createMsg}</div>
 					<img src="content/images/exc-mark.png">
 				</div>
-				<c:set var="actionMsg" value="" scope="session"/>
+				<c:set var="createMsg" value="" scope="session"/>
+            </c:if>
+            <c:if test="${editMsg!=null&&!editMsg.isEmpty()}">
+				<div class="warn">
+					<div data-i18n="pec">${editMsg}</div>
+					<img src="content/images/exc-mark.png">
+				</div>
+				<c:set var="editMsg" value="" scope="session"/>
+            </c:if>
+            <c:if test="${deleteMsg!=null&&!deleteMsg.isEmpty()}">
+				<div class="warn">
+					<div data-i18n="pds">${deleteMsg}</div>
+					<img src="content/images/exc-mark.png">
+				</div>
+				<c:set var="deleteMsg" value="" scope="session"/>
             </c:if>
 			<table>
 				<thead>
 					<tr>
-						<th class="sortable">Name</th>
-						<th class="sortable">Price</th>
-						<th class="sortable">Addition Date</th>
-						<th class="sortable">Category</th>
-						<th>Actions</th>
+						<th class="sortable" data-i18n="n">Name</th>
+						<th class="sortable" data-i18n="p">Price</th>
+						<th class="sortable" data-i18n="ad">Addition Date</th>
+						<th class="sortable" data-i18n="cg">Category</th>
+						<th data-i18n="as">Actions</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -35,13 +49,13 @@
 							<td><p>${product.category.name}</p></td>
 							<td>
 								<ul class="actions">
-									<li><a class="add-button" href="options?action=add&product=${product.id}">Add to cart</a></li>
+									<li><a class="add-button" data-i18n="ac" href="options?action=add&product=${product.id}">Add to cart</a></li>
 									<c:if test="${user!=null}">
 										<c:forEach var="role" items="${user.getRoles()}">
   											<c:if test="${role==admin}">
   												<c:set var="createNew" value="${true}"/>
-    											<li><a class="edit-button" href="options?action=edit&product=${product.id}">Edit</a></li>
-												<li><a class="delete-button" href="options?action=delete&product=${product.id}">Delete</a></li>
+    											<li><a class="edit-button" data-i18n="e" href="options?action=edit&product=${product.id}">Edit</a></li>
+												<li><a class="delete-button" data-i18n="d" href="options?action=delete&product=${product.id}">Delete</a></li>
   											</c:if>
 										</c:forEach>
 									</c:if>
@@ -52,7 +66,7 @@
 				</tbody>
 			</table>
 			<c:if test="${createNew}">
-				<a href="options?action=create" class="submit-button">Create new product</a>
+				<a class="submit-button" data-i18n="np" href="options?action=create">Create new product</a>
 			</c:if>
 			<c:set var="catalog" value="" scope="request"/>
 		</main>

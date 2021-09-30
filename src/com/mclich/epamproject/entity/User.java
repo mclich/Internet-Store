@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import com.mclich.epamproject.Constants;
 
 @SuppressWarnings("serial")
 public class User implements Serializable
@@ -47,6 +48,7 @@ public class User implements Serializable
 		this.orders=new ArrayList<>();
 		this.roles=new ArrayList<>();
 		this.roles.add(Role.CLIENT);
+		Constants.LOGGER.info("Entity created: "+this.toString());
 	}
 	
 	public String getLogin()
@@ -141,4 +143,11 @@ public class User implements Serializable
 		if(role==null) throw new NullPointerException("Role cannot be null");
 		if(!this.roles.remove(role)) throw new NoSuchElementException("This user does not contain given role");
 	}
+
+	@Override
+	public String toString()
+	{
+		return "User [login="+this.login+", email="+this.email+", firstName="+this.firstName+", lastName="+this.lastName+", gender="+(this.gender?"male]":"female]");
+	}
+	
 }

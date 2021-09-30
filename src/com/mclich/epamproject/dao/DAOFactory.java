@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.exception.CNAException;
 import com.mclich.epamproject.exception.TransactionException;
 import com.mclich.epamproject.exception.TransactionException.GetException;
-import com.mclich.epamproject.filter.LogFilter;
 
 public class DAOFactory
 {
@@ -43,6 +43,24 @@ public class DAOFactory
 		return DAOFactory.INSTANCES.get(type);
 	}
 	
+	public Connection getConnection() throws CNAException
+	{
+		List<String> args=DAOFactory.ARGUMENTS.get(this.type);
+		Connection con=null;
+		try
+		{
+			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+			con=DriverManager.getConnection(args.get(0), args.get(1), args.get(2));
+			con.setAutoCommit(false);
+		}
+		catch(SQLException exc)
+		{
+			Constants.LOGGER.error("Connection is not available", exc);
+			throw new CNAException("Connection is not available: "+exc.getMessage());
+		}
+		return con;
+	}
+	
 	public <E extends TransactionException> void rollback(Connection con, E exc) throws E
 	{
 		try
@@ -51,7 +69,7 @@ public class DAOFactory
 		}
 		catch(SQLException e)
 		{
-			LogFilter.getLogger().error("Could not rollback connection", e);
+			Constants.LOGGER.error("Could not rollback connection", e);
 			throw exc;
 		}
 	}
@@ -64,7 +82,7 @@ public class DAOFactory
 		}
 		catch(SQLException e)
 		{
-			LogFilter.getLogger().error("Could not close connection", e);
+			Constants.LOGGER.error("Could not close connection", e);
 			throw exc;
 		}
 	}
@@ -78,7 +96,7 @@ public class DAOFactory
 		}
 		catch(SQLException e)
 		{
-			LogFilter.getLogger().error("Could not close statement or connection", e);
+			Constants.LOGGER.error("Could not close statement or connection", e);
 			throw exc;
 		}
 	}
@@ -92,26 +110,8 @@ public class DAOFactory
 		}
 		catch(SQLException e)
 		{
-			LogFilter.getLogger().error("Could not close result set, statement or connection", e);
+			Constants.LOGGER.error("Could not close result set, statement or connection", e);
 			throw exc;
 		}
-	}
-	
-	public Connection getConnection() throws CNAException
-	{
-		List<String> args=DAOFactory.ARGUMENTS.get(this.type);
-		Connection con=null;
-		try
-		{
-			DriverManager.registerDriver(new com.mysql.jdbc.Driver());
-			con=DriverManager.getConnection(args.get(0), args.get(1), args.get(2));
-			con.setAutoCommit(false);
-		}
-		catch(SQLException exc)
-		{
-			LogFilter.getLogger().error("Connection is not available", exc);
-			throw new CNAException("Connection is not available: "+exc.getMessage());
-		}
-		return con;
 	}
 }

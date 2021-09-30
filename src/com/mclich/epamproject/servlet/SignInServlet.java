@@ -21,8 +21,12 @@ public class SignInServlet extends HttpServlet
 	{
 		if(req.getServletPath().equals("/logout"))
 		{
-			if(req.getSession().getAttribute("user")!=null) req.getSession().setAttribute("logMsg", "You have successfully logged out");
-			req.getSession().setAttribute("user", null);	
+			if(req.getSession().getAttribute("user")!=null)
+			{
+				req.getSession().setAttribute("logMsg", "You have successfully logged out");
+				Constants.LOGGER.info("Signed out: "+req.getSession().getAttribute("user").toString());
+				req.getSession().setAttribute("user", null);
+			}
 		}
 		req.getRequestDispatcher("content/pages/sign-in.jsp").forward(req, res);
 	}
@@ -40,9 +44,10 @@ public class SignInServlet extends HttpServlet
 			catch(CNAException | GetException exc)
 			{
 				String msg=exc.getMessage();
-				if(msg!=null&&(msg.equals("Such user does not exist")||msg.equals("Wrong password, try again")))
+				if(msg!=null)
 				{
-					req.getSession().setAttribute("userNotFound", exc.getMessage());
+					if(msg.equals("Such user does not exist")) req.getSession().setAttribute("userNotExist", exc.getMessage()); 
+					if(msg.equals("Wrong password, try again")) req.getSession().setAttribute("wrongPw", exc.getMessage()); 
 					res.sendRedirect("sign-in");
 				}
 				else Constants.errorRedirect(req, res, exc, false);
@@ -50,8 +55,9 @@ public class SignInServlet extends HttpServlet
 		}
 		if(user!=null)
 		{
+			Constants.LOGGER.info("Signed in: "+user.toString());
 			req.getSession().setAttribute("user", user);
-			req.getSession().setAttribute("loggedAs", "You are logged in as "+user.getFirstName()+" "+user.getLastName());
+			req.getSession().setAttribute("loggedAs", user.getFirstName()+" "+user.getLastName());
 			res.sendRedirect("../InternetStore");
 		}
 	}

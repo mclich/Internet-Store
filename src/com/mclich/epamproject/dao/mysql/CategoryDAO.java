@@ -6,13 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.dao.DAOFactory;
 import com.mclich.epamproject.dao.DAOFactory.Type;
 import com.mclich.epamproject.dao.DataAccessObject;
 import com.mclich.epamproject.entity.Category;
 import com.mclich.epamproject.exception.CNAException;
 import com.mclich.epamproject.exception.TransactionException.*;
-import com.mclich.epamproject.filter.LogFilter;
 
 public class CategoryDAO implements DataAccessObject<Category>
 {
@@ -45,7 +45,7 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not create a new category", exc);
+			Constants.LOGGER.error("Could not create a new category", exc);
 			this.factory.rollback(con, new CreateException());
 			throw new CreateException(exc.getMessage());
 		}
@@ -70,13 +70,13 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not delete a category", exc);
+			Constants.LOGGER.error("Could not delete a category", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
 		catch(GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get category ID", exc);
+			Constants.LOGGER.error("Could not get category ID", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
@@ -102,7 +102,7 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not update a category", exc);
+			Constants.LOGGER.error("Could not update a category", exc);
 			this.factory.rollback(con, new UpdateException());
 			throw new UpdateException(exc.getMessage());
 		}
@@ -130,7 +130,7 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get a category", exc);
+			Constants.LOGGER.error("Could not get a category", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -159,7 +159,7 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get a category ID", exc);
+			Constants.LOGGER.error("Could not get a category ID", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -190,7 +190,7 @@ public class CategoryDAO implements DataAccessObject<Category>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get a list of categories", exc);
+			Constants.LOGGER.error("Could not get a list of categories", exc);
 			result=new ArrayList<>();
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());

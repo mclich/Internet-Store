@@ -2,6 +2,7 @@ package com.mclich.epamproject.entity;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import com.mclich.epamproject.Constants;
 
 @SuppressWarnings("serial")
 public class Product implements Serializable
@@ -20,6 +21,7 @@ public class Product implements Serializable
 		this.price=price;
 		this.additionDate=additionDate;
 		this.category=category;
+		Constants.LOGGER.info("Entity created: "+this.toString());
 	}
 	
 	public Product(String name, float price, Category category)
@@ -78,19 +80,10 @@ public class Product implements Serializable
 	{
 		this.category=category;
 	}
-	
-	/*
+
 	@Override
-	public boolean equals(Object obj)
+	public String toString()
 	{
-		if(obj==null) return false;
-		if(this==obj) return true;
-		if(obj instanceof Product)
-		{
-			Product p=(Product)obj;
-			return this.id==p.id;
-		}
-		else return false;
+		return "Product [name="+this.name+", price="+this.price+", additionDate="+this.additionDate.format(Constants.DATE_FORMAT)+", category="+this.category.getName()+"]";
 	}
-	*/
 }

@@ -1,13 +1,10 @@
 package com.mclich.epamproject.listener;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.time.format.DateTimeFormatter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.entity.User.Role;
 
 @WebListener
@@ -16,14 +13,13 @@ public class AppConfig implements ServletContextListener
 	@Override
 	public void contextInitialized(ServletContextEvent event)
 	{
+		//Constants.LOGGER.info("Application initialized, config location: "+((LoggerContext)LogManager.getContext(false)).getConfiguration().getConfigurationSource().getLocation());
+		Constants.LOGGER.info("Application initialized");
 		final ServletContext sc=event.getServletContext();
-		DecimalFormatSymbols separator=new DecimalFormatSymbols();
-		separator.setDecimalSeparator('.');
-		//sc.setAttribute("priceFormatter", new DecimalFormat("#,###,###,###.00 ₴", separator));
-		DecimalFormat df=new DecimalFormat("#.00", separator);
-		df.setRoundingMode(RoundingMode.UP);
-		sc.setAttribute("dateFormatter", DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-		sc.setAttribute("priceFormatter", df);
+		sc.setAttribute("lang", "en");
+		sc.setAttribute("dateFormatter", Constants.DATE_FORMAT);
+		sc.setAttribute("floatFormatter", Constants.FLOAT_FORMAT);
+		sc.setAttribute("priceFormatter", Constants.PRICE_FORMAT);
 		sc.setAttribute("client", Role.CLIENT);
 		sc.setAttribute("admin", Role.ADMIN);
 	}
@@ -31,8 +27,11 @@ public class AppConfig implements ServletContextListener
 	@Override
 	public void contextDestroyed(ServletContextEvent event)
 	{
+		Constants.LOGGER.info("Application closed");
 		final ServletContext sc=event.getServletContext();
+		sc.removeAttribute("lang");
 		sc.removeAttribute("dateFormatter");
+		sc.removeAttribute("floatFormatter");
 		sc.removeAttribute("priceFormatter");
 		sc.removeAttribute("client");
 		sc.removeAttribute("admin");

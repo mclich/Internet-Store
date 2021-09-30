@@ -10,9 +10,7 @@ import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.dao.mysql.UserDAO;
 import com.mclich.epamproject.entity.User;
 import com.mclich.epamproject.entity.User.Role;
-import com.mclich.epamproject.exception.CNAException;
 import com.mclich.epamproject.exception.NoRightsException;
-import com.mclich.epamproject.exception.TransactionException.GetException;
 
 @WebServlet("/user-list")
 @SuppressWarnings("serial")
@@ -30,14 +28,12 @@ public class UserListServlet extends HttpServlet
 		}
 		else noAccess=true;
 		if(noAccess) Constants.errorRedirect(req, res, new NoRightsException("You have no rights to enter that page"), false);
-		else try
+		else
 		{
+			Constants.LOGGER.warn("Start getting users...");
 			req.setAttribute("userList", UserDAO.getInstance().getAll());
+			Constants.LOGGER.warn("Getting users finished");
 			req.getRequestDispatcher("content/pages/user-list.jsp").forward(req, res);
-		}
-		catch(CNAException | GetException exc)
-		{
-			Constants.errorRedirect(req, res, exc, false);
 		}
 	}
 }

@@ -1,30 +1,33 @@
 <%@ include file="imports.jsp" %>
-<html>
+<html lang="${lang}">
     <head>
 		<%@ include file="head.jsp" %>
-		<title>Internet Store - Orders</title>
+		<title data-i18n="is-o">Internet Store - Orders</title>
 	</head>
     <body>
 		<%@ include file="header.jsp" %>
 		<main>
-			<h2 class="hl">Orders</h2>
+			<h2 class="hl" data-i18n="o">Orders</h2>
 			<c:choose>
          		<c:when test="${orders==null||orders.isEmpty()}">
          			<form>
-						<div class="msg form-button">${fullName} does not have any orders yet</div>
-						<a class="form-button add-button" href="${param['back']}">Back</a>
+						<div class="msg form-button">
+							<div>${fullName}&nbsp;</div>
+							<div data-i18n="no">does not have any orders yet</div>
+						</div>
+						<a class="form-button add-button" data-i18n="b" href="${param['back']}">Back</a>
 					</form>
          		</c:when>
 				<c:otherwise>
 					<table>
 						<thead>
 							<tr>
-								<th>Orderer</th>
-								<th>Name</th>
-								<th>Count</th>
-								<th>Price</th>
-								<th>Total Price</th>
-								<th>Status</th>
+								<th data-i18n="or">Orderer</th>
+								<th data-i18n="n">Name</th>
+								<th data-i18n="c">Count</th>
+								<th data-i18n="p">Price</th>
+								<th data-i18n="tp">Total Price</th>
+								<th data-i18n="s">Status</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -40,18 +43,18 @@
 										<td><p>${product.key.name}</p></td>
 										<td><p>${product.value}</p></td>
 										<td><p>${product.key.price}</p></td>
-										<c:if test="${i.index==0}"><td rowspan="${order.products.size()}"><p>${priceFormatter.format(totalPrice)}</p></td></c:if>
+										<c:if test="${i.index==0}"><td rowspan="${order.products.size()}"><p>${floatFormatter.format(totalPrice)}</p></td></c:if>
 										<c:if test="${i.index==0}">
 											<c:if test="${order.status.toString().equals('Paid')}"><c:set var="statusClass" value="paid"/></c:if>
 											<c:if test="${order.status.toString().equals('Cancelled')}"><c:set var="statusClass" value="cancelled"/></c:if>
-											<td rowspan="${order.products.size()}"><p class="${statusClass}">${order.status.toString()}</p></td>
+											<td rowspan="${order.products.size()}"><p class="${statusClass}" data-i18n="${statusClass}">${order.status.toString()}</p></td>
 										</c:if>
 									</tr>
 								</c:forEach>
 							</c:forEach>
 						</tbody>
 					</table>
-					<a class="add-button" href="${param['back']}">Back</a>
+					<a class="add-button" data-i18n="b" href="${param['back']}">Back</a>
 				</c:otherwise>
 			</c:choose>
 		</main>

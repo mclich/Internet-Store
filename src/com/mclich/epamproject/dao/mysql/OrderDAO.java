@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import com.mclich.epamproject.Constants;
 import com.mclich.epamproject.dao.DAOFactory;
 import com.mclich.epamproject.dao.DataAccessObject;
 import com.mclich.epamproject.dao.DAOFactory.Type;
@@ -16,7 +17,6 @@ import com.mclich.epamproject.entity.Product;
 import com.mclich.epamproject.entity.Order.Status;
 import com.mclich.epamproject.exception.CNAException;
 import com.mclich.epamproject.exception.TransactionException.*;
-import com.mclich.epamproject.filter.LogFilter;
 
 public class OrderDAO implements DataAccessObject<Order>
 {
@@ -72,7 +72,7 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not create a new order", exc);
+			Constants.LOGGER.error("Could not create a new order", exc);
 			this.factory.rollback(con, new CreateException());
 			throw new CreateException(exc.getMessage());
 		}
@@ -102,13 +102,13 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not delete an order", exc);
+			Constants.LOGGER.error("Could not delete an order", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
 		catch(GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get an order ID", exc);
+			Constants.LOGGER.error("Could not get an order ID", exc);
 			this.factory.rollback(con, new DeleteException());
 			throw new DeleteException(exc.getMessage());
 		}
@@ -146,7 +146,7 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not update an order", exc);
+			Constants.LOGGER.error("Could not update an order", exc);
 			this.factory.rollback(con, new UpdateException());
 			throw new UpdateException(exc.getMessage());
 		}
@@ -188,7 +188,7 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get a product", exc);
+			Constants.LOGGER.error("Could not get a product", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -219,13 +219,13 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get a category ID", exc);
+			Constants.LOGGER.error("Could not get a category ID", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
 		catch(GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get user from order", exc);
+			Constants.LOGGER.error("Could not get user from order", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -255,7 +255,7 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException exc)
 		{
-			LogFilter.getLogger().error("Could not get last inserted ID value", exc);
+			Constants.LOGGER.error("Could not get last inserted ID value", exc);
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());
 		}
@@ -286,7 +286,7 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 		catch(SQLException | GetException exc)
 		{
-			LogFilter.getLogger().error("Could not get a list of categories", exc);
+			Constants.LOGGER.error("Could not get a list of categories", exc);
 			result=new ArrayList<>();
 			this.factory.rollback(con, new GetException());
 			throw new GetException(exc.getMessage());

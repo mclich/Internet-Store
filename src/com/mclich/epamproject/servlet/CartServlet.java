@@ -14,9 +14,6 @@ import com.mclich.epamproject.dao.mysql.ProductDAO;
 import com.mclich.epamproject.entity.Order;
 import com.mclich.epamproject.entity.Product;
 import com.mclich.epamproject.entity.User;
-import com.mclich.epamproject.exception.CNAException;
-import com.mclich.epamproject.exception.TransactionException.CreateException;
-import com.mclich.epamproject.exception.TransactionException.GetException;
 
 @WebServlet("/cart")
 @SuppressWarnings("serial")
@@ -30,20 +27,13 @@ public class CartServlet extends HttpServlet
 			int id=Integer.parseInt(req.getParameter("add")!=null?req.getParameter("add"):req.getParameter("remove")!=null?req.getParameter("remove"):req.getParameter("delete"));
 			@SuppressWarnings("unchecked")
 			Map<Product, Integer> cartProducts=(HashMap<Product, Integer>)req.getSession().getAttribute("cartProducts");
+			User currUser=(User)req.getSession().getAttribute("user");
 			if(cartProducts!=null)
 			{
 				if(req.getParameterMap().containsKey("add"))
 				{
-					Product product=null;
+					Product product=ProductDAO.getInstance().get(id);
 					Product tmp=null;
-					try
-					{
-						product=ProductDAO.getInstance().get(id);
-					}
-					catch(CNAException | GetException exc)
-					{
-						Constants.errorRedirect(req, res, exc, false);
-					}
 					for(Product p:cartProducts.keySet())
 					{
 						if(product.getId()==p.getId()&&product.getName().equals(p.getName()))
@@ -54,22 +44,38 @@ public class CartServlet extends HttpServlet
 					}
 					if(tmp!=null)
 					{
-						if(cartProducts.get(tmp)<100) cartProducts.put(tmp, cartProducts.get(tmp)+1);
+						if(cartProducts.get(tmp)<100)
+						{
+							cartProducts.put(tmp, cartProducts.get(tmp)+1);
+							Constants.LOGGER.info((currUser!=null?currUser.toString():"User")+" added to cart: "+tmp.toString());
+						}
 					}
-					else cartProducts.put(product, 1);
+					else
+					{
+						cartProducts.put(product, 1);
+						Constants.LOGGER.info((currUser!=null?currUser.toString():"User")+" added to cart: "+product.toString());
+					}
 				}
 				else if(req.getParameterMap().containsKey("remove"))
 				{
 					for(Product p:cartProducts.keySet())
 					{
-						if(p.getId()==id&&cartProducts.get(p)>1) cartProducts.put(p, cartProducts.get(p)-1);
+						if(p.getId()==id&&cartProducts.get(p)>1)
+						{
+							cartProducts.put(p, cartProducts.get(p)-1);
+							Constants.LOGGER.info((currUser!=null?currUser.toString():"User")+" removed from cart: "+p.toString());
+						}
 					}
 				}
 				else if(req.getParameterMap().containsKey("delete"))
 				{
 					for(Product p:cartProducts.keySet())
 					{
-						if(p.getId()==id) cartProducts.remove(p);
+						if(p.getId()==id)
+						{
+							cartProducts.remove(p);
+							Constants.LOGGER.info((currUser!=null?currUser.toString():"User")+" deleted from cart: "+p.toString());
+						}
 					}
 				}
 			}
@@ -87,16 +93,10 @@ public class CartServlet extends HttpServlet
 		User copy=new User(user.getLogin(), user.getPassword(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getGender());
 		Order order=new Order(copy, orderProducts);
 		copy.addOrder(order);
-		try
-		{
-			OrderDAO.getInstance().create(order);
-		}
-		catch(CNAException | CreateException exc)
-		{
-			Constants.errorRedirect(req, res, exc, false);
-		}
+		OrderDAO.getInstance().create(order);
+		Constants.LOGGER.info("Created: "+order.toString());
 		cartProducts.clear();
-		req.getSession().setAttribute("purchase", "Order was created successfully, status: "+order.getStatus().toString());
+		req.getSession().setAttribute("purchase", "Order was created successfully");
 		res.sendRedirect("cart");
 	}
 }
