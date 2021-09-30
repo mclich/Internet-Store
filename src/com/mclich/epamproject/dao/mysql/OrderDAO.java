@@ -156,6 +156,31 @@ public class OrderDAO implements DataAccessObject<Order>
 		}
 	}
 
+	public void updateStatus(int id, Status status) throws UpdateException, CNAException
+	{
+		Connection con=null;
+		PreparedStatement ps=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("UPDATE internet_store.order SET status=? WHERE id=?;");
+			ps.setInt(1, status.ordinal());
+			ps.setInt(2, id);
+			ps.executeUpdate();
+			con.commit();
+		}
+		catch(SQLException | GetException exc)
+		{
+			Constants.LOGGER.error("Could not update an order", exc);
+			this.factory.rollback(con, new UpdateException());
+			throw new UpdateException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(ps, con, new UpdateException());
+		}
+	}
+	
 	@Override
 	public Order get(int id) throws GetException, CNAException
 	{
@@ -234,6 +259,34 @@ public class OrderDAO implements DataAccessObject<Order>
 			this.factory.close(rs, ps, con, new GetException());
 		}
 		if(result==-1) throw new IllegalArgumentException("No orders were found in DB by order characteristics");
+		return result;
+	}
+	
+	public Status getStatus(int id)
+	{
+		Status result=null;
+		Connection con=null;
+		PreparedStatement ps=null;
+		ResultSet rs=null;
+		try
+		{
+			con=this.factory.getConnection();
+			ps=con.prepareStatement("SELECT status FROM internet_store.order WHERE id=?;", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ps.setInt(1, id);
+			rs=ps.executeQuery();
+			if(rs.first()) result=Status.byInteger(rs.getInt(1));
+			con.commit();
+		}
+		catch(SQLException | GetException exc)
+		{
+			Constants.LOGGER.error("Could not get a product", exc);
+			this.factory.rollback(con, new GetException());
+			throw new GetException(exc.getMessage());
+		}
+		finally
+		{
+			this.factory.close(rs, ps, con, new GetException());
+		}
 		return result;
 	}
 	

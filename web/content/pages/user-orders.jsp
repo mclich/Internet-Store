@@ -19,6 +19,12 @@
 					</form>
          		</c:when>
 				<c:otherwise>
+					<c:set var="isAdmin" value="${false}"/>
+					<c:forEach var="role" items="${user.getRoles()}">
+  						<c:if test="${role==admin}">
+  							<c:set var="isAdmin" value="${true}"/>
+  						</c:if>
+					</c:forEach>
 					<table>
 						<thead>
 							<tr>
@@ -28,6 +34,7 @@
 								<th data-i18n="p">Price</th>
 								<th data-i18n="tp">Total Price</th>
 								<th data-i18n="s">Status</th>
+								<c:if test="${isAdmin}"><th data-i18n="as">Actions</th></c:if>
 							</tr>
 						</thead>
 						<tbody>
@@ -48,6 +55,13 @@
 											<c:if test="${order.status.toString().equals('Paid')}"><c:set var="statusClass" value="paid"/></c:if>
 											<c:if test="${order.status.toString().equals('Cancelled')}"><c:set var="statusClass" value="cancelled"/></c:if>
 											<td rowspan="${order.products.size()}"><p class="${statusClass}" data-i18n="${statusClass}">${order.status.toString()}</p></td>
+										</c:if>
+										<c:if test="${i.index==0&&isAdmin}">
+											<td rowspan="${order.products.size()}">
+												<ul class="actions">
+													<li><a class="add-button" data-i18n="cs" href="user-orders?login=${param.login}&order=${order.id}&back=user-list">Change Status</a></li>
+												</ul>
+											</td>
 										</c:if>
 									</tr>
 								</c:forEach>
